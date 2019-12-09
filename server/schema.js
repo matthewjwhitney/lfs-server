@@ -1,5 +1,6 @@
 const { gql } = require("apollo-server-express");
-const mongoose = require("mongoose");
+const producers = require("./producers.json");
+/* const mongoose = require("mongoose"); */
 
 const typeDefs = gql`
   type Producer {
@@ -14,7 +15,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    getProducers: [Producer]
+    producers: [Producer]
   }
 
   type Mutation {
@@ -31,7 +32,7 @@ const typeDefs = gql`
   }
 `;
 
-const producerSchema = new mongoose.Schema({
+/* const producerSchema = new mongoose.Schema({
   name: { type: String },
   location: { type: String },
   productTypes: { type: String },
@@ -43,14 +44,12 @@ const producerSchema = new mongoose.Schema({
 });
 
 producerSchema.set("toObject", { virtuals: true });
-
-const MProducers = mongoose.model("Producer", producerSchema);
+const producers = mongoose.model("Producer", producerSchema); */
 
 const resolvers = {
   Query: {
-    getProducers: () => {
-      return MProducers.find();
-    }
+    /* producers: () => producers.find() */
+    producers: () => producers
   }
 };
 
