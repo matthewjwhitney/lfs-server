@@ -1,11 +1,8 @@
 {
-  "name": "local-food-services server",
-  "description": "local-food-services server",
-  "main": "index.js",
+  "name": "server",
   "scripts": {
-    "start": "nodemon main"
+    "start": "node index.js"
   },
-  "keywords": [],
   "devDependencies": {
     "nodemon": "^2.0.1"
   },
