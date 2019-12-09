@@ -1,0 +1,28 @@
+{
+  "name": "local-food-services",
+  "version": "1.0.0",
+  "description": "local-food-services",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon main",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matthewjwhitney/local-food-services.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matthewjwhitney/local-food-services/issues"
+  },
+  "homepage": "https://github.com/matthewjwhitney/local-food-services#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.1"
+  },
+  "dependencies": {
+    "apollo-server-express": "^2.9.13",
+    "graphql": "^14.5.8"
+  }
+}
