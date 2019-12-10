@@ -1,5 +1,4 @@
-const { ApolloServer } = require("apollo-server-express");
-var express = require("express");
+const { ApolloServer } = require("apollo-server");
 
 const { typeDefs, resolvers } = require("./schema");
 
@@ -24,12 +23,6 @@ db.on("error", console.error.bind(console, "DB connection error")); */
 
 const server = new ApolloServer({ typeDefs, resolvers });
 
-const app = express();
-
-server.applyMiddleware({ app });
-
-const port = 4000;
-
-app.listen({ port }, () =>
-  console.log(`Server ready at http://localhost:${port}${server.graphqlPath}`)
-);
+server.listen().then(({ url }) => {
+  console.log(`Server ready at ${url}`);
+});
