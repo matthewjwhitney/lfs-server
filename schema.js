@@ -1,6 +1,6 @@
 const { gql } = require("apollo-server-express");
-const producers = require("./producers.json");
-/* const mongoose = require("mongoose"); */
+/* const producers = require("./producers.json"); */
+const mongoose = require("mongoose");
 
 const typeDefs = gql`
   type Producer {
@@ -32,24 +32,24 @@ const typeDefs = gql`
   }
 `;
 
-/* const producerSchema = new mongoose.Schema({
-  name: { type: String },
-  location: { type: String },
-  productTypes: { type: String },
-  contactPerson: { type: String },
-  phoneNumber: { type: String },
-  email: { type: String },
-  website: { type: String },
-  notes: { type: String }
+const producerSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  location: { type: String, required: true },
+  productTypes: { type: String, required: true },
+  contactPerson: { type: String, required: true },
+  phoneNumber: { type: String, required: true },
+  email: { type: String, required: true },
+  website: { type: String, required: true },
+  notes: { type: String, required: true }
 });
 
 producerSchema.set("toObject", { virtuals: true });
-const producers = mongoose.model("Producer", producerSchema); */
+const producers = mongoose.model("Producer", producerSchema);
 
 const resolvers = {
   Query: {
-    /* producers: () => producers.find() */
-    producers: () => producers
+    producers: () => producers.find({})
+    /* producers: () => producers */
   }
 };
 
