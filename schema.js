@@ -1,9 +1,9 @@
 const { gql } = require("apollo-server-express");
-/* const producers = require("./producers.json"); */
 const mongoose = require("mongoose");
 
 const typeDefs = gql`
   type Producer {
+    id: ID
     name: String
     location: String
     productTypes: String
@@ -29,27 +29,78 @@ const typeDefs = gql`
       website: String
       notes: String
     ): Producer
+    updateProducer(
+      id: ID!
+      name: String
+      location: String
+      productTypes: String
+      contactPerson: String
+      phoneNumber: String
+      email: String
+      website: String
+      notes: String
+    ): Producer
+    deleteProducer(id: ID!): Producer
   }
 `;
 
 const producerSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  location: { type: String, required: true },
-  productTypes: { type: String, required: true },
-  contactPerson: { type: String, required: true },
-  phoneNumber: { type: String, required: true },
-  email: { type: String, required: true },
-  website: { type: String, required: true },
-  notes: { type: String, required: true }
+  name: { type: String },
+  location: { type: String },
+  productTypes: { type: String },
+  contactPerson: { type: String },
+  phoneNumber: { type: String },
+  email: { type: String },
+  website: { type: String },
+  notes: { type: String }
 });
 
 producerSchema.set("toObject", { virtuals: true });
-const producers = mongoose.model("Producer", producerSchema);
+const Producer = mongoose.model("Producer", producerSchema);
 
 const resolvers = {
   Query: {
-    producers: () => producers.find({})
-    /* producers: () => producers */
+    producers: () => Producer.find({})
+  },
+  Mutation: {
+    addProducer: (parent, args) =>
+      new Producer({
+        name: args.name,
+        location: args.location,
+        productTypes: args.productTypes,
+        contactPerson: args.contactPerson,
+        phoneNumber: args.phoneNumber,
+        email: args.email,
+        website: args.website,
+        notes: args.notes
+      }).save(),
+    updateProducer: (parent, args) => {
+      if (!args.id) return;
+      return Producer.findOneAndUpdate(
+        {
+          _id: args.id
+        },
+        {
+          $set: {
+            name: args.name,
+            location: args.location,
+            productTypes: args.productTypes,
+            contactPerson: args.contactPerson,
+            phoneNumber: args.phoneNumber,
+            email: args.email,
+            website: args.website,
+            notes: args.notes
+          }
+        },
+        { new: true }
+      );
+    },
+    deleteProducer: (parent, args) => {
+      if (!args.id) return;
+      return Producer.findOneAndDelete({
+        _id: args.id
+      });
+    }
   }
 };
 

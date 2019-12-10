@@ -16,7 +16,7 @@ mongoose
   .connect(dbURL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(
     db => {
-      console.log("Connected with DB successfully");
+      console.log("Server connected with database successfully");
     },
     err => {
       console.log(err);
@@ -26,6 +26,5 @@ mongoose
 const server = new ApolloServer({ typeDefs, resolvers });
 server.applyMiddleware({ app });
 
-app.listen({ port: 4000 }, () =>
-  console.log(`Server ready at http://localhost:4000${server.graphqlPath}`)
-);
+const port = 4000;
+app.listen({ port }, () => console.log(`Server ready at ${port}`));
