@@ -1,22 +1,14 @@
 {
-  "name": "local-food-services",
+  "name": "server",
   "scripts": {
-    "start": "cd ./server && npm install && cd ../client && npm install && concurrently \"npm start\" \"cd ../server && npm start\""
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/matthewjwhitney/local-food-services.git"
-  },
-  "author": "Matthew J. Whitney",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/matthewjwhitney/local-food-services/issues"
-  },
-  "homepage": "https://github.com/matthewjwhitney/local-food-services#readme",
-  "dependencies": {
-    "concurrently": "^4.1.0"
+    "start": "nodemon index.js"
   },
   "devDependencies": {
     "nodemon": "^2.0.1"
+  },
+  "dependencies": {
+    "apollo-server-express": "^2.9.13",
+    "graphql": "^14.5.8",
+    "mongoose": "^5.7.14"
   }
 }

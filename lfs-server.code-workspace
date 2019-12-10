@@ -1,0 +1,13 @@
+{
+  "folders": [
+    {
+      "name": "lfs-server",
+      "path": "."
+    },
+    {
+      "name": "lfs-client",
+      "path": "..\\lfs-client"
+    }
+  ],
+  "settings": {}
+}
