@@ -1,11 +1,7 @@
 {
   "name": "local-food-services",
   "scripts": {
-    "server-install": "npm install --prefix ./server",
-    "client-install": "npm install --prefix ./client",
-    "client": "cd client && npm start",
-    "server": "cd server && npm start",
-    "start": "concurrently \"npm run server\" \"npm run client\""
+    "start": "cd ./server && npm install && cd ../client && npm install && concurrently \"npm start\" \"cd ../server && npm start\""
   },
   "repository": {
     "type": "git",
