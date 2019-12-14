@@ -29,6 +29,7 @@ const typeDefs = gql`
       website: String
       notes: String
     ): Producer
+
     updateProducer(
       id: ID!
       name: String
@@ -40,6 +41,7 @@ const typeDefs = gql`
       website: String
       notes: String
     ): Producer
+    
     deleteProducer(id: ID!): Producer
   }
 `;
@@ -62,42 +64,22 @@ const resolvers = {
   Query: {
     producers: () => Producer.find({})
   },
+
   Mutation: {
-    addProducer: (parent, args) =>
-      new Producer({
-        name: args.name,
-        location: args.location,
-        productTypes: args.productTypes,
-        contactPerson: args.contactPerson,
-        phoneNumber: args.phoneNumber,
-        email: args.email,
-        website: args.website,
-        notes: args.notes
-      }).save(),
+    addProducer: (parent, args) => new Producer({ ...args }).save(),
+
     updateProducer: (parent, args) => {
       if (!args.id) return;
       return Producer.findOneAndUpdate(
-        {
-          _id: args.id
-        },
-        {
-          $set: {
-            name: args.name,
-            location: args.location,
-            productTypes: args.productTypes,
-            contactPerson: args.contactPerson,
-            phoneNumber: args.phoneNumber,
-            email: args.email,
-            website: args.website,
-            notes: args.notes
-          }
-        },
+        { _id: args.id },
+        { $set: { ...args } },
         { new: true }
       );
     },
+
     deleteProducer: (parent, args) => {
       if (!args.id) return;
-      return Producer.findOneAndDelete({
+      return Producer.findByIdAndRemove({
         _id: args.id
       });
     }
