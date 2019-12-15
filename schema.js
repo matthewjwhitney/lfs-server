@@ -79,9 +79,7 @@ const resolvers = {
 
     deleteProducer: (parent, args) => {
       if (!args.id) return;
-      return Producer.findByIdAndRemove({
-        _id: args.id
-      });
+      return Producer.findByIdAndRemove({ _id: args.id });
     }
   }
 };

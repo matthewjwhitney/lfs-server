@@ -13,7 +13,7 @@ const dbURL =
   "mongodb://matthewjwhitney:testpass1@ds253408.mlab.com:53408/producers";
 
 mongoose
-  .connect(dbURL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(dbURL, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
   .then(
     db => {
       console.log("Server connected with database successfully");
@@ -27,4 +27,4 @@ const server = new ApolloServer({ typeDefs, resolvers });
 server.applyMiddleware({ app });
 
 const port = 4000;
-app.listen({ port }, () => console.log(`Server ready at ${port}`));
+app.listen({ port }, () => console.log(`Server ready at http://localhost:${port}\n\View graphql playground at http://localhost:${port}/graphql`));
