@@ -26,5 +26,8 @@ mongoose
 const server = new ApolloServer({ typeDefs, resolvers });
 server.applyMiddleware({ app });
 
-const port = 4000;
-app.listen({ port }, () => console.log(`Server ready at http://localhost:${port}\n\View graphql playground at http://localhost:${port}/graphql`));
+app.get('/', function (req, res) {
+  res.send('lfs-server is running. visit /graphql to view playground.');
+});
+var port = process.env.PORT || 4000;
+app.listen({ port }, () => console.log(`Server ready at http://localhost:${port} \n\View graphql playground at http://localhost:${port}/graphql`));
