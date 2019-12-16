@@ -27,7 +27,7 @@ const server = new ApolloServer({ typeDefs, resolvers });
 server.applyMiddleware({ app });
 
 app.get('/', function (req, res) {
-  res.send('lfs-server is running. visit /graphql to view playground.');
+  res.send('lfs-server is running.');
 });
 var port = process.env.PORT || 4000;
-app.listen({ port }, () => console.log(`Server ready at http://localhost:${port} \n\View graphql playground at http://localhost:${port}/graphql`));
+app.listen({ port }, () => console.log(`Server ready at http://localhost:${port} \n\ In development, view graphql playground at http://localhost:${port}/graphql`));
