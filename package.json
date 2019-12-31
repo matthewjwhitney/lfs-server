@@ -2,20 +2,24 @@
   "name": "lfs-server",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js localhost 4000"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "set NODE_ENV=development && node ./dist/index.js",
+    "dev": "babel-watch ./src",
+    "build": "babel ./src -d ./dist "
   },
   "devDependencies": {
-    "nodemon": "^2.0.1"
+    "@babel/cli": "^7.7.5",
+    "@babel/preset-env": "^7.7.6",
+    "babel-watch": "^7.0.0"
   },
   "dependencies": {
+    "@babel/core": "^7.7.5",
+    "lodash": "^4.17.15",
     "apollo-server-express": "2.9.13",
     "body-parser": "^1.19.0",
     "cors": "2.8.5",
     "express": "4.17.1",
     "graphql": "14.5.8",
     "mongoose": "5.8.0"
-  },
-  "keywords": [],
-  "description": ""
+  }
 }

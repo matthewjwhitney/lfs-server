@@ -6,7 +6,7 @@
     },
     {
       "name": "lfs-client",
-      "path": "..\\lfs-client"
+      "path": "../lfs-client"
     }
   ],
   "settings": {}
