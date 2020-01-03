@@ -1,20 +1,14 @@
 import { AuthenticationError } from "apollo-server-express";
 import bcrypt from "bcrypt";
+import jwt from 'jsonwebtoken';
 
 export const resolvers = {
   Query: {
-    currentUser: (parent, args, { user }) => user,
-    users: async (parent, context) => {
-      if (!context.user) {
-        throw new AuthenticationError("You are not authenticated");
-      }
-      return await context.models.userModel.find({}).exec();
-    },
-    user: async (parent, { id }, { models: { userModel }, user }, info) => {
+    currentUser: async (parent, args, { models: { userModel }, user }, info) => {
       if (!user) {
         throw new AuthenticationError("You are not authenticated");
       }
-      return await userModel.findById({ id }).exec();
+      return await userModel.findById(user.id);
     },
     login: async (
       parent,
@@ -22,8 +16,7 @@ export const resolvers = {
       { models: { userModel } },
       info
     ) => {
-      const user = await userModel.findOne({ email }).exec();
-
+      const user = await userModel.findOne({ email });
       if (!user) {
         throw new AuthenticationError("Invalid credentials");
       }
@@ -41,21 +34,34 @@ export const resolvers = {
       return {
         token
       };
-    }
+    },
+    user: async (parent, { id }, { models: { userModel }, user }, info) => {
+      if (!user) {
+        throw new AuthenticationError("You are not authenticated");
+      }
+      return await userModel.findById(id);
+    },
+    users: async (parent, args, { models: { userModel }, user }, info) => {
+      if (!user) {
+        throw new AuthenticationError("You are not authenticated");
+      }
+      return await userModel.find({});
+    },
   },
 
   Mutation: {
-    createUser: async (parent, args, { models: { userModel } }) =>
-      await userModel.create({ ...args }),
-    updateUser: async (parent, args, { models: { userModel } }) =>
+    createUser: async (parent, args, { models: { userModel } }, info) => {
+      const user = await userModel.create({ ...args });
+      return user;
+    },
+    deleteUser: async (parent, args, { models: { userModel } }, info) =>
+      await userModel.findByIdAndRemove({ _id: args.id }),
+    updateUser: async (parent, args, { models: { userModel } }, info) =>
       await userModel
         .findOneAndUpdate(
           { _id: args.id },
           { $set: { ...args } },
           { new: true }
-        )
-        .exec(),
-    deleteUser: async (parent, args, { models: { userModel } }) =>
-      await userModel.findByIdAndRemove({ _id: args.id }).exec()
+        ),
   }
 };

@@ -6,7 +6,6 @@ export const typeDefs = gql`
     firstName: String
     lastName: String
     email: String
-    password: String
   }
 
   type Token {
@@ -22,10 +21,10 @@ export const typeDefs = gql`
 
   extend type Mutation {
     createUser(
-      firstName: String
-      lastName: String
-      email: String
-      password: String
+      firstName: String!
+      lastName: String!
+      email: String!
+      password: String!
     ): User
 
     updateUser(

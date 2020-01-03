@@ -23,11 +23,10 @@ const corsOptions = {
 
 const getUser = async req => {
   const token = req.headers["token"];
-
   if (token) {
     try {
       return await jwt.verify(token, "riddlemethis");
-    } catch (e) {
+    } catch (error) {
       throw new AuthenticationError("Your session expired. Sign in again.");
     }
   }

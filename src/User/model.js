@@ -6,9 +6,9 @@ const userSchema = new mongoose.Schema({
   lastName: String,
   email: String,
   password: String
-});
+}).set("toObject", { virtuals: true });
 
-userSchema.pre("save", () => {
+userSchema.pre('save', function () {
   const hashedPassword = bcrypt.hashSync(this.password, 12);
   this.password = hashedPassword;
 });
