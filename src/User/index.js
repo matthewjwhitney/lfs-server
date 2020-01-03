@@ -1,5 +1,5 @@
-import { typeDefs as userTypes } from './typeDefs';
-import { resolvers as userResolvers } from './resolvers';
-import { schema as userSchema } from './schema'
+import { typeDefs as userTypes } from "./typeDefs";
+import { resolvers as userResolvers } from "./resolvers";
+import { default as userModel } from "./model";
 
-export { userResolvers, userTypes, userSchema };
+export { userResolvers, userTypes, userModel };

@@ -1,52 +1,47 @@
-import { ApolloServer, mergeSchemas, gql } from "apollo-server-express";
+import {
+  ApolloServer,
+  mergeSchemas,
+  gql,
+  AuthenticationError
+} from "apollo-server-express";
 import express from "express";
+import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import cors from "cors";
-import passport from "passport";
-import uuid from "uuid/v4";
-import session from "express-session";
-import { merge } from 'lodash';
+import { merge } from "lodash";
 
-import { producerTypes, producerResolvers } from "./Producer";
-import { userTypes, userResolvers, userSchema } from "./User";
-import { initPassport } from './initPassport';
-import buildContext from "graphql-passport/lib/buildContext";
+import { producerTypes, producerResolvers, producerModel } from "./Producer";
+import { userTypes, userResolvers, userModel } from "./User";
 
 const port = process.env.PORT || 4000;
-const SESSION_SECRECT = 'bad secret';
-
-const User = mongoose.model("User", userSchema);
-initPassport({ User });
-
 const app = express();
-
-app.use(bodyParser.json());
-
 const corsOptions = {
-  origin: ['http://localhost:3000'],
-  credentials: true,
+  origin: ["http://localhost:3000"],
+  credentials: true
 };
 
+const getUser = async req => {
+  const token = req.headers["token"];
+
+  if (token) {
+    try {
+      return await jwt.verify(token, "riddlemethis");
+    } catch (e) {
+      throw new AuthenticationError("Your session expired. Sign in again.");
+    }
+  }
+};
+
+app.use(bodyParser.json());
 app.use(cors(corsOptions));
 
-app.use(session({
-  genid: (req) => uuid(),
-  secret: SESSION_SECRECT,
-  resave: false,
-  saveUninitialized: false,
-  // use secure cookies for production meaning they will only be sent via https
-  //cookie: { secure: true }
-}));
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-const dbURL =
-  "mongodb://admin:D$nbX6XRMwedBh@ds253408.mlab.com:53408/producers";
-
 mongoose
-  .connect(dbURL, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+  .connect("mongodb://admin:D$nbX6XRMwedBh@ds253408.mlab.com:53408/producers", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
+  })
   .then(
     db => {
       console.log("Server connected with database successfully");
@@ -59,7 +54,7 @@ mongoose
 const typeDefs = gql`
   type Query {
     _blank: String
-  },
+  }
   type Mutation {
     _blank: String
   }
@@ -67,40 +62,36 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    _blank: () => null,
+    _blank: () => null
   },
   Mutation: {
-    _blank: () => null,
+    _blank: () => null
   }
-}
+};
 
 const schema = mergeSchemas({
-  schemas: [
-    typeDefs,
-    producerTypes,
-    userTypes,
-  ],
-  resolvers: merge(
-    resolvers,
-    producerResolvers,
-    userResolvers,
-  )
-})
+  schemas: [typeDefs, producerTypes, userTypes],
+  resolvers: merge(resolvers, producerResolvers, userResolvers)
+});
 
 const server = new ApolloServer({
   schema,
-  context: ({ req, res }) => buildContext({ req, res, User }),
+  context: async ({ req }) => ({
+    user: await getUser(req),
+    models: {
+      userModel,
+      producerModel
+    }
+  }),
   playground: {
     settings: {
-      'request.credentials': 'same-origin',
-    },
-  },
+      "request.credentials": "same-origin"
+    }
+  }
 });
 
-server.applyMiddleware({ app, cors: false });
+server.applyMiddleware({ app, cors: false, path: "/graphql" });
 
-app.get('/', function (req, res) {
-  res.send('lfs-server is running.');
-});
-
-app.listen({ port }, () => console.log(`Server ready at http://localhost:${port}`));
+app.listen({ port }, () =>
+  console.log(`Server ready at http://localhost:${port}`)
+);
